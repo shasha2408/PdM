@@ -1,0 +1,255 @@
+[
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "Optional",
+        "importPath": "typing",
+        "description": "typing",
+        "isExtraImport": true,
+        "detail": "typing",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "FastAPI",
+        "importPath": "fastapi",
+        "description": "fastapi",
+        "isExtraImport": true,
+        "detail": "fastapi",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "BaseModel",
+        "importPath": "pydantic",
+        "description": "pydantic",
+        "isExtraImport": true,
+        "detail": "pydantic",
+        "documentation": {}
+    },
+    {
+        "label": "tensorflow",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "tensorflow",
+        "description": "tensorflow",
+        "detail": "tensorflow",
+        "documentation": {}
+    },
+    {
+        "label": "keras",
+        "importPath": "tensorflow",
+        "description": "tensorflow",
+        "isExtraImport": true,
+        "detail": "tensorflow",
+        "documentation": {}
+    },
+    {
+        "label": "numpy",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "numpy",
+        "description": "numpy",
+        "detail": "numpy",
+        "documentation": {}
+    },
+    {
+        "label": "pickle",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "pickle",
+        "description": "pickle",
+        "detail": "pickle",
+        "documentation": {}
+    },
+    {
+        "label": "joblib",
+        "kind": 6,
+        "isExtraImport": true,
+        "importPath": "joblib",
+        "description": "joblib",
+        "detail": "joblib",
+        "documentation": {}
+    },
+    {
+        "label": "model_from_json",
+        "importPath": "keras.models",
+        "description": "keras.models",
+        "isExtraImport": true,
+        "detail": "keras.models",
+        "documentation": {}
+    },
+    {
+        "label": "Model_Inference",
+        "kind": 6,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "class Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open('threshold_value', 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(\"Loaded threshold from disk\")\ndef load_Scaler():\n    global loaded_scaler",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "read_threshold_value",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def read_threshold_value():\n    global threshold\n    with open('threshold_value', 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(\"Loaded threshold from disk\")\ndef load_Scaler():\n    global loaded_scaler\n    loaded_scaler = joblib.load('scaler_data')\n    print(\"Loaded scaler from disk\")",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "load_Scaler",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def load_Scaler():\n    global loaded_scaler\n    loaded_scaler = joblib.load('scaler_data')\n    print(\"Loaded scaler from disk\")\ndef load_model():\n    global loaded_model\n    loaded_model = keras.models.load_model(MODEL_PATH)\n    print(\"Loaded model from disk\")\n    read_threshold_value()\n    load_Scaler()",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "load_model",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def load_model():\n    global loaded_model\n    loaded_model = keras.models.load_model(MODEL_PATH)\n    print(\"Loaded model from disk\")\n    read_threshold_value()\n    load_Scaler()\nload_model()\n@app.get(\"/\")\ndef read_root():\n    return {\"Root Endpoint from Predictive Maintence\"}",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "read_root",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def read_root():\n    return {\"Root Endpoint from Predictive Maintence\"}\n@app.post(\"/PDM_Model_Inference/\")\ndef PDM_Model_Inference(model_inference: Model_Inference):\n    data = np.array(model_inference.ME1)\n    data = data.reshape(1, len(data))\n    data_scaled = loaded_scaler.transform(data) #2dl uncomment this code\n    # reshape inputs for LSTM [samples, timesteps, features]\n    data_scaled = data_scaled.reshape(data_scaled.shape[0], 1, data_scaled.shape[1])\n    inference_predicted = loaded_model.predict(data_scaled)",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "PDM_Model_Inference",
+        "kind": 2,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "def PDM_Model_Inference(model_inference: Model_Inference):\n    data = np.array(model_inference.ME1)\n    data = data.reshape(1, len(data))\n    data_scaled = loaded_scaler.transform(data) #2dl uncomment this code\n    # reshape inputs for LSTM [samples, timesteps, features]\n    data_scaled = data_scaled.reshape(data_scaled.shape[0], 1, data_scaled.shape[1])\n    inference_predicted = loaded_model.predict(data_scaled)\n    inference_predicted = inference_predicted.reshape(inference_predicted.shape[0], inference_predicted.shape[2])\n    data_scaled = data_scaled.reshape(data_scaled.shape[0], data_scaled.shape[2])\n    loss_mae = np.mean(np.abs(inference_predicted - data_scaled), axis=1)",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "app = FastAPI()\nloaded_model = None\nthreshold = None\n# MODEL_PATH = '/home/sudarsan/Python_Projects/Predictive_Maintence/app/my_model'\nMODEL_PATH = '/app/my_model'\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open('threshold_value', 'rb') as f:",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "loaded_model",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "loaded_model = None\nthreshold = None\n# MODEL_PATH = '/home/sudarsan/Python_Projects/Predictive_Maintence/app/my_model'\nMODEL_PATH = '/app/my_model'\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open('threshold_value', 'rb') as f:\n        data = pickle.load(f)",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "threshold",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "threshold = None\n# MODEL_PATH = '/home/sudarsan/Python_Projects/Predictive_Maintence/app/my_model'\nMODEL_PATH = '/app/my_model'\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open('threshold_value', 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "MODEL_PATH",
+        "kind": 5,
+        "importPath": "app.main",
+        "description": "app.main",
+        "peekOfCode": "MODEL_PATH = '/app/my_model'\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open('threshold_value', 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(\"Loaded threshold from disk\")\ndef load_Scaler():",
+        "detail": "app.main",
+        "documentation": {}
+    },
+    {
+        "label": "Model_Inference",
+        "kind": 6,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "class Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open(\"threshold_value\", 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(data['threshold'])\ndef load_model():\n    global loaded_model",
+        "detail": "endpoint",
+        "documentation": {}
+    },
+    {
+        "label": "read_threshold_value",
+        "kind": 2,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "def read_threshold_value():\n    global threshold\n    with open(\"threshold_value\", 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(data['threshold'])\ndef load_model():\n    global loaded_model\n    json_file = open('model.json','r')\n    loaded_model_json = json_file.read()",
+        "detail": "endpoint",
+        "documentation": {}
+    },
+    {
+        "label": "load_model",
+        "kind": 2,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "def load_model():\n    global loaded_model\n    json_file = open('model.json','r')\n    loaded_model_json = json_file.read()\n    json_file.close()\n    loaded_model = model_from_json(loaded_model_json)\n    # load weights into new model\n    loaded_model.load_weights(\"model.h5\")\n    print(\"Loaded model from disk\")\n    read_threshold_value()",
+        "detail": "endpoint",
+        "documentation": {}
+    },
+    {
+        "label": "read_root",
+        "kind": 2,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "def read_root():\n    return {\"Root Endpoint\"}\n@app.post(\"/PDM_Model_Inference/\")\nasync def PDM_Model_Inference(model_inference: Model_Inference):\n    data = numpy.array(model_inference.ME1)\n    resconstruction = loaded_model.predict(data.reshape(1, 66))\n    inference_loss = tf.keras.losses.mae(resconstruction, data)\n    inference_res = tf.math.less(inference_loss[0], threshold)\n    if inference_res:\n        return \"Normal\"",
+        "detail": "endpoint",
+        "documentation": {}
+    },
+    {
+        "label": "app",
+        "kind": 5,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "app = FastAPI()\nloaded_model = None\nthreshold = None\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open(\"threshold_value\", 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']",
+        "detail": "endpoint",
+        "documentation": {}
+    },
+    {
+        "label": "loaded_model",
+        "kind": 5,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "loaded_model = None\nthreshold = None\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open(\"threshold_value\", 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(data['threshold'])",
+        "detail": "endpoint",
+        "documentation": {}
+    },
+    {
+        "label": "threshold",
+        "kind": 5,
+        "importPath": "endpoint",
+        "description": "endpoint",
+        "peekOfCode": "threshold = None\nclass Model_Inference(BaseModel):\n    ME1: list\ndef read_threshold_value():\n    global threshold\n    with open(\"threshold_value\", 'rb') as f:\n        data = pickle.load(f)\n    threshold = data['threshold']\n    print(data['threshold'])\ndef load_model():",
+        "detail": "endpoint",
+        "documentation": {}
+    }
+]
